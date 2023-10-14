@@ -1,0 +1,40 @@
+@font-face {
+  font-family: "Nexa";
+  src: url("./assets/fonts/nexa_light.woff2") format("woff2");
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Nexa";
+  src: url("./assets/fonts/nexa_regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Nexa";
+  src: url("./assets/fonts/nexa_bold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+html,
+body {
+  font-family: "MathSymbols", "Nexa";
+  color: #d5d5d5;
+  background-color: #131313;
+  font-weight: 400;
+}
+
+main {
+  width: 100%;
+  height: calc(100svh);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
