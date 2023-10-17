@@ -4,9 +4,9 @@
   "description": "Vue.js calculator app",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host --port 3000",
     "build": "vue-tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview --host --port 3000"
   },
   "dependencies": {
     "the-new-css-reset": "^1.11.0",
@@ -14,7 +14,6 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.4.0",
-    "node-sass": "^9.0.0",
     "sass": "^1.69.3",
     "sass-loader": "^13.3.2",
     "typescript": "^5.2.2",

@@ -1,15 +1,11 @@
 <script setup lang="ts">
 const props = defineProps({
-  action: {
-    type: Function,
-  },
+  action: Function,
   name: {
     type: String,
     required: true,
   },
-  alt: {
-    type: Array,
-  },
+  alt: Array,
 });
 
 function handleClick() {
@@ -36,7 +32,9 @@ document.addEventListener("keydown", (e) => {
 </script>
 
 <template>
-  <button :id="props.name" @click="handleClick">{{ props.name }}</button>
+  <button :id="props.name" @click="handleClick">
+    <p>{{ props.name }}</p>
+  </button>
 </template>
 
 <style lang="scss" scoped>
@@ -47,8 +45,6 @@ button {
   justify-content: center;
   align-items: center;
 
-  font-size: 1.5rem;
-  font-weight: bold;
   color: #131313;
   background-color: #d5d5d5;
   border-radius: 30px;
@@ -59,6 +55,11 @@ button {
   &:focus {
     color: #d5d5d5;
     background-color: #131313;
+  }
+
+  &.relative p {
+    position: relative;
+    bottom: 0.5rem;
   }
 }
 </style>

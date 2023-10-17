@@ -24,10 +24,10 @@
 
 html,
 body {
-  font-family: "MathSymbols", "Nexa";
+  font-family: "Nexa";
   color: #d5d5d5;
   background-color: #131313;
-  font-weight: 400;
+  -webkit-tap-highlight-color: transparent;
 }
 
 main {
@@ -37,4 +37,5 @@ main {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  user-select: none;
 }
