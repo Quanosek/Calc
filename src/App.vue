@@ -8,7 +8,7 @@ let isError: boolean = false;
 let lastOperator: boolean = false;
 let currentNumber: string = "";
 
-function Add(value: string | number) {
+const Add = (value: string | number) => {
   if (isError) ClearButton();
 
   if (typeof value == "number") {
@@ -22,9 +22,9 @@ function Add(value: string | number) {
 
   result.value += value;
   currentNumber += value;
-}
+};
 
-function Operator(value: string) {
+const Operator = (value: string) => {
   if (isError) return;
 
   if (lastOperator || result.value.endsWith(",")) BackspaceButton();
@@ -33,18 +33,18 @@ function Operator(value: string) {
   Add(value);
   lastOperator = true;
   currentNumber = "";
-}
+};
 
-function ClearButton() {
+const ClearButton = () => {
   result.value = "";
   isError = false;
   lastOperator = false;
   currentNumber = "";
-}
+};
 
 let openBrackets: boolean = false;
 
-function BracketsButton() {
+const BracketsButton = () => {
   if (result.value.includes("(") && openBrackets) {
     Add(")");
     openBrackets = false;
@@ -52,9 +52,9 @@ function BracketsButton() {
     Add("(");
     openBrackets = true;
   }
-}
+};
 
-function SubtractionButton() {
+const SubtractionButton = () => {
   if (isError || result.value.endsWith("-")) return;
 
   if (!currentNumber) {
@@ -63,16 +63,16 @@ function SubtractionButton() {
   } else {
     Operator("-");
   }
-}
+};
 
-function CommaButton() {
+const CommaButton = () => {
   if (!currentNumber) Add(0);
   if (currentNumber.includes(",")) return;
 
   Add(",");
-}
+};
 
-function BackspaceButton() {
+const BackspaceButton = () => {
   if (isError) {
     result.value = "";
     isError = false;
@@ -85,9 +85,9 @@ function BackspaceButton() {
   if (currentNumber && !lastOperator) {
     currentNumber = currentNumber.slice(0, -1);
   } else lastOperator = false;
-}
+};
 
-function GetResults() {
+const GetResults = () => {
   if (isError || !result.value.length) return;
 
   if (currentNumber === "-" || lastOperator) {
@@ -110,7 +110,7 @@ function GetResults() {
     lastOperator = false;
     currentNumber = "";
   }
-}
+};
 </script>
 
 <template>
