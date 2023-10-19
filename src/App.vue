@@ -15,24 +15,24 @@ function Add(value: string | number) {
     value = value.toString();
 
     if (currentNumber.startsWith("0")) BackspaceButton();
-
-    currentNumber += value;
     lastOperator = false;
+  } else {
+    if (currentNumber.endsWith(value)) return;
   }
 
   result.value += value;
+  currentNumber += value;
 }
 
 function Operator(value: string) {
   if (isError) return;
-  currentNumber = "";
 
-  if (lastOperator) {
-    BackspaceButton();
-  }
+  if (lastOperator || result.value.endsWith(",")) BackspaceButton();
+  if (currentNumber === "-") BackspaceButton(), BackspaceButton();
 
   Add(value);
   lastOperator = true;
+  currentNumber = "";
 }
 
 function ClearButton() {
@@ -42,19 +42,22 @@ function ClearButton() {
   currentNumber = "";
 }
 
+let openBrackets: boolean = false;
+
 function BracketsButton() {
-  // if (result.value.includes("(")) {
-  //   Add(")");
-  // } else {
-  //   Add("(");
-  // }
+  if (result.value.includes("(") && openBrackets) {
+    Add(")");
+    openBrackets = false;
+  } else {
+    Add("(");
+    openBrackets = true;
+  }
 }
 
 function SubtractionButton() {
   if (isError || result.value.endsWith("-")) return;
 
   if (!currentNumber) {
-    currentNumber += "-";
     Add("-");
     lastOperator = false;
   } else {
@@ -63,9 +66,10 @@ function SubtractionButton() {
 }
 
 function CommaButton() {
-  // if (!currentNumber) Add(0);
-  // if (currentNumber.includes(",")) return;
-  // Add(",");
+  if (!currentNumber) Add(0);
+  if (currentNumber.includes(",")) return;
+
+  Add(",");
 }
 
 function BackspaceButton() {
@@ -74,16 +78,19 @@ function BackspaceButton() {
     isError = false;
   }
 
-  if (lastOperator) lastOperator = false;
-  else currentNumber = currentNumber.slice(0, -1);
-
   result.value = result.value.slice(0, -1);
+
+  if (result.value && !currentNumber) lastOperator = true;
+
+  if (currentNumber && !lastOperator) {
+    currentNumber = currentNumber.slice(0, -1);
+  } else lastOperator = false;
 }
 
 function GetResults() {
-  if (isError) return;
+  if (isError || !result.value.length) return;
 
-  if (lastOperator) {
+  if (currentNumber === "-" || lastOperator) {
     if (result.value.endsWith("-")) BackspaceButton();
     BackspaceButton();
   }
@@ -114,12 +121,8 @@ function GetResults() {
       </div>
 
       <div class="grid">
-        <Button :action="ClearButton" name="AC" :alt="[`Escape`, `Delete`]" />
-        <Button
-          :action="BracketsButton"
-          name="( )"
-          :alt="[`(`, `)`, `[`, `]`]"
-        />
+        <Button :action="ClearButton" name="AC" :alt="[`Delete`]" />
+        <Button :action="BracketsButton" name="( )" :alt="[`(`, `)`]" />
         <Button :action="() => Add('%')" name="%" />
         <Button
           :action="() => Operator('÷')"
