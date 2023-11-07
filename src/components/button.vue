@@ -32,7 +32,7 @@ document.addEventListener("keydown", (e) => {
 </script>
 
 <template>
-  <button :id="props.name" @click="handleClick">
+  <button :id="props.name" class="win-btn" @click="handleClick">
     <p>{{ props.name }}</p>
   </button>
 </template>
@@ -41,13 +41,12 @@ document.addEventListener("keydown", (e) => {
 button {
   aspect-ratio: 1/1;
 
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
 
-  color: #131313;
-  background-color: #d5d5d5;
-  border-radius: 30px;
+  background-color: #2c2c2c;
   transition: all 0.1s ease-in-out;
   cursor: pointer;
 

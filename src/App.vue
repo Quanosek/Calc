@@ -3,6 +3,7 @@ import Button from "./components/button.vue";
 import { ref } from "vue";
 
 const result = ref("");
+let history: string = "";
 
 let isError: boolean = false;
 let lastOperator: boolean = false;
@@ -14,10 +15,11 @@ const Add = (value: string | number) => {
   if (typeof value == "number") {
     value = value.toString();
 
-    if (currentNumber.startsWith("0")) BackspaceButton();
+    if (currentNumber.startsWith("0") && !currentNumber.startsWith("0,")) {
+      BackspaceButton();
+    }
+
     lastOperator = false;
-  } else {
-    if (currentNumber.endsWith(value)) return;
   }
 
   result.value += value;
@@ -37,20 +39,27 @@ const Operator = (value: string) => {
 
 const ClearButton = () => {
   result.value = "";
+  history = "";
+
   isError = false;
   lastOperator = false;
   currentNumber = "";
 };
 
-let openBrackets: boolean = false;
+let openBrackets: number = 0;
 
 const BracketsButton = () => {
-  if (result.value.includes("(") && openBrackets) {
-    Add(")");
-    openBrackets = false;
-  } else {
+  if (result.value.endsWith("(")) {
     Add("(");
-    openBrackets = true;
+    openBrackets++;
+  } else {
+    if (!openBrackets) {
+      Add("(");
+      openBrackets++;
+    } else {
+      Add(")");
+      openBrackets--;
+    }
   }
 };
 
@@ -66,8 +75,8 @@ const SubtractionButton = () => {
 };
 
 const CommaButton = () => {
-  if (!currentNumber) Add(0);
   if (currentNumber.includes(",")) return;
+  if (!currentNumber.length) Add(0);
 
   Add(",");
 };
@@ -85,6 +94,8 @@ const BackspaceButton = () => {
   if (currentNumber && !lastOperator) {
     currentNumber = currentNumber.slice(0, -1);
   } else lastOperator = false;
+
+  if (!result.value) history = "";
 };
 
 const GetResults = () => {
@@ -94,6 +105,12 @@ const GetResults = () => {
     if (result.value.endsWith("-")) BackspaceButton();
     BackspaceButton();
   }
+
+  for (let i = 0; i < openBrackets; i++) {
+    Add(")");
+  }
+
+  history = result.value;
 
   try {
     const input = result.value
@@ -116,8 +133,9 @@ const GetResults = () => {
 <template>
   <main>
     <div class="frame">
-      <div class="result" type="text">
-        <p>{{ result }}</p>
+      <div class="display" type="text">
+        <p class="history">{{ history }}</p>
+        <p class="result">{{ result }}</p>
       </div>
 
       <div class="grid">
@@ -171,6 +189,8 @@ const GetResults = () => {
           class="enlarge"
         />
       </div>
+
+      <p class="embossing">Made by klalo.pl</p>
     </div>
   </main>
 </template>
@@ -179,30 +199,37 @@ const GetResults = () => {
 .frame {
   padding: 3rem 2rem;
   width: 25rem;
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 1.5rem;
+  gap: 0.25rem;
+  color: #d5d5d5;
   background-color: #252525;
-  border: 1.5px solid #d5d5d5;
   border-radius: 1rem;
+  box-shadow: 3px 10px 12px #000000;
 }
 
-.result {
+.display {
   padding: 0 1.2rem;
   width: 100%;
   height: 5.5rem;
   display: flex;
-  justify-content: flex-end;
-  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
 
   font-size: 2rem;
   color: #252525;
   background-color: #d5d5d5;
-  border-radius: 0.6rem;
 
   overflow: hidden;
+
+  .history {
+    opacity: 70%;
+    font-size: 65%;
+  }
 }
 
 .grid {
@@ -211,11 +238,21 @@ const GetResults = () => {
   font-size: 200%;
   font-weight: bold;
 
+  grid-gap: 0.1rem;
   grid-template-columns: repeat(4, 1fr);
-  grid-gap: 1rem;
 
   .enlarge {
     font-size: 135%;
   }
+}
+
+.embossing {
+  position: absolute;
+  bottom: 1rem;
+  font-size: 75%;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #252525;
+  text-shadow: -0.5px -0.5px 1px #131313, 0.5px 0.5px 1px #2c2c2c;
 }
 </style>
